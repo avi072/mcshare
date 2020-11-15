@@ -1,0 +1,223 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Customer",
+    "description": "defaultDescription",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost"
+    }
+  ],
+  "paths": {
+    "/mcshares/api/customer/read.php": {
+      "post": {
+        "description": "Obtain information about customer from the McShare database",
+        "parameters": [
+          {
+            "name": "pageno",
+            "in": "query",
+            "description": "The page number to return",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "maximum": 30,
+              "minimum": 1,
+              "type": "integer",
+              "example": 2
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "description": "The number of customer per page to return",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "maximum": 30,
+              "minimum": 1,
+              "type": "integer",
+              "example": 2
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful pull of customer info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/customer"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "customer with the specified ID was not found"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "read:customer"
+            ]
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost"
+        }
+      ]
+    },
+    "/mcshares/api/customer/search.php": {
+      "get": {
+        "description": "Obtain information about customer from the McShare database",
+        "parameters": [
+          {
+            "name": "s",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "ohn Do"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/customer"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "customer not found"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "read:customer"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "http://localhost"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost"
+        }
+      ]
+    },
+    "/mcshares/api/customer/update.php": {
+      "put": {
+        "description": "Update customer by id",
+        "requestBody": {
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "string"
+              },
+              "examples": {
+                "0": {
+                  "value": "{\r\n    \"customer_id\":\"C11233\",\r\n    \"num_shares\":\"10\",\r\n    \"share_price\":\"30\"\r\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "customer was updated"
+          },
+          "503": {
+            "description": "Unable to update customer"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "write:customer"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "http://localhost"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost"
+        }
+      ]
+    }
+  },
+  "components": {
+    "schemas": {
+      "customer": {
+        "type": "array",
+        "items": {
+          "properties": {
+            "customer_id": {
+              "type": "string",
+              "example": "C11233"
+            },
+            "contact_name": {
+              "type": "string",
+              "example": "Mr John Doe"
+            },
+            "date_of_birth": {
+              "type": "string",
+              "example": "1987-07-19"
+            },
+            "customer_type": {
+              "type": "string",
+              "example": "Individual"
+            },
+            "num_shares": {
+              "type": "integer",
+              "example": 10200
+            },
+            "share_price": {
+              "type": "number",
+              "example": 11.4
+            },
+            "balance": {
+              "type": "number",
+              "example": 116280.4
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "oauth2": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "http://yourauthurl.com",
+            "scopes": {
+              "scope_name": "Enter your scopes here"
+            }
+          }
+        }
+      }
+    }
+  }
+}
